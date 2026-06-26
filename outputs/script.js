@@ -1,15 +1,15 @@
 const image = {
-  collision: "https://images.pexels.com/photos/4489732/pexels-photo-4489732.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  body: "https://images.pexels.com/photos/3806255/pexels-photo-3806255.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  paint: "https://images.pexels.com/photos/6872147/pexels-photo-6872147.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  dent: "https://images.pexels.com/photos/3806252/pexels-photo-3806252.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  bumper: "https://images.pexels.com/photos/4489742/pexels-photo-4489742.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  frame: "https://images.pexels.com/photos/3806288/pexels-photo-3806288.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  scratch: "https://images.pexels.com/photos/97075/pexels-photo-97075.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  match: "https://images.pexels.com/photos/3806257/pexels-photo-3806257.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  insurance: "https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  before: "https://images.pexels.com/photos/4489702/pexels-photo-4489702.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  after: "https://images.pexels.com/photos/3807329/pexels-photo-3807329.jpeg?auto=compress&cs=tinysrgb&w=1200"
+  collision: "https://images.pexels.com/photos/6872147/pexels-photo-6872147.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  body: "https://images.pexels.com/photos/3806257/pexels-photo-3806257.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  paint: "https://images.pexels.com/photos/6872144/pexels-photo-6872144.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  dent: "https://images.pexels.com/photos/6872146/pexels-photo-6872146.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  bumper: "https://images.pexels.com/photos/6872154/pexels-photo-6872154.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  frame: "https://images.pexels.com/photos/4489732/pexels-photo-4489732.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  scratch: "https://images.pexels.com/photos/4489742/pexels-photo-4489742.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  match: "https://images.pexels.com/photos/3806249/pexels-photo-3806249.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  insurance: "https://images.pexels.com/photos/6872143/pexels-photo-6872143.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  before: "https://images.pexels.com/photos/3806257/pexels-photo-3806257.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  after: "https://images.pexels.com/photos/6872144/pexels-photo-6872144.jpeg?auto=compress&cs=tinysrgb&w=1200"
 };
 
 const translations = {
@@ -431,12 +431,15 @@ const options = {
 };
 
 let currentLang = "en";
+let pageChangeTimer;
 
 function text(key) {
   return translations[currentLang][key] || key;
 }
 
 function setPage(pageId) {
+  clearTimeout(pageChangeTimer);
+
   document.querySelectorAll(".page").forEach((page) => {
     page.classList.toggle("active-page", page.id === pageId);
   });
@@ -449,7 +452,9 @@ function setPage(pageId) {
   if (mobileNav) mobileNav.classList.remove("open");
 
   closeModals();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  pageChangeTimer = setTimeout(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, 80);
 }
 
 function applyTranslations() {
