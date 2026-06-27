@@ -28,9 +28,19 @@ const translations = {
     trustCollision: "Collision Repair",
     trustPaint: "Paint Matching",
     trustBody: "Body Repair",
+    cockpitKicker: "Finish Control",
+    cockpitGloss: "Gloss target",
+    cockpitScan: "Panel scan",
+    expScan: "Digital damage read",
+    expColor: "Color behavior check",
+    expSpray: "Controlled spray layers",
+    expFinish: "Final reflection pass",
     labEyebrow: "Paint Lab",
     labTitle: "Choose the mood of the finish before the repair even begins.",
     labText: "A premium paint job is about tone, reflection, edge control and how the color moves under light. This demo preview turns the shop into a finish studio.",
+    surfaceEyebrow: "Surface intelligence",
+    surfaceTitle: "Every panel has a different light story.",
+    surfaceText: "The demo experience is built around how modern paint work is actually judged: reflection, edges, panel tone, clear coat depth and final inspection.",
     homeServicesEyebrow: "What we do",
     homeServicesTitle: "Professional body repair for cars that need to look right again.",
     collisionRepair: "Collision Repair",
@@ -103,9 +113,19 @@ const translations = {
     trustCollision: "Ремонт после ДТП",
     trustPaint: "Подбор цвета",
     trustBody: "Кузовной ремонт",
+    cockpitKicker: "Контроль финиша",
+    cockpitGloss: "Цель глянца",
+    cockpitScan: "Скан панели",
+    expScan: "Цифровое чтение повреждений",
+    expColor: "Проверка поведения цвета",
+    expSpray: "Контролируемые слои",
+    expFinish: "Финальная проверка отражения",
     labEyebrow: "Лаборатория цвета",
     labTitle: "Выберите настроение финиша еще до начала ремонта.",
     labText: "Премиальная покраска - это тон, отражение, чистые края и то, как цвет меняется под светом. Этот демо-блок превращает мастерскую в студию финиша.",
+    surfaceEyebrow: "Интеллект поверхности",
+    surfaceTitle: "У каждой панели своя история света.",
+    surfaceText: "Демо построено вокруг того, как реально оценивают современную покраску: отражение, края, тон панели, глубина лака и финальный контроль.",
     homeServicesEyebrow: "Что мы делаем",
     homeServicesTitle: "Профессиональный кузовной ремонт для автомобилей, которые должны снова выглядеть правильно.",
     collisionRepair: "Ремонт после ДТП",
@@ -523,6 +543,7 @@ function applyTranslations() {
   fillSelects();
   calculateEstimate();
   applyFinish(currentFinish);
+  observeRevealItems();
 }
 
 function applyFinish(finishKey) {
@@ -554,7 +575,7 @@ function renderServices() {
     const item = service[currentLang];
 
     return `
-      <article class="service-card">
+      <article class="service-card reveal" data-tilt>
         <img src="${service.photo}" alt="${item.title}">
         <div class="card-body">
           <h3>${item.title}</h3>
@@ -576,7 +597,7 @@ function renderWork() {
     const item = work[currentLang];
 
     return `
-      <article class="work-card" role="button" tabindex="0" data-work-index="${index}">
+      <article class="work-card reveal" data-tilt role="button" tabindex="0" data-work-index="${index}">
         <div class="work-images">
           <img src="${work.before}" alt="${item.title} before">
           <img src="${work.after}" alt="${item.title} after">
@@ -756,6 +777,52 @@ document.getElementById("finishStage")?.addEventListener("mouseleave", (event) =
   event.currentTarget.style.setProperty("--tilt-y", "0deg");
 });
 
+document.addEventListener("pointermove", (event) => {
+  document.documentElement.style.setProperty("--mouse-x", `${event.clientX}px`);
+  document.documentElement.style.setProperty("--mouse-y", `${event.clientY}px`);
+});
+
+document.addEventListener("pointermove", (event) => {
+  const card = event.target.closest("[data-tilt]");
+  if (!card) return;
+  const rect = card.getBoundingClientRect();
+  const x = ((event.clientX - rect.left) / rect.width - 0.5) * 9;
+  const y = ((event.clientY - rect.top) / rect.height - 0.5) * -8;
+  card.style.setProperty("--tilt-card-x", `${y}deg`);
+  card.style.setProperty("--tilt-card-y", `${x}deg`);
+});
+
+document.addEventListener("pointerout", (event) => {
+  const card = event.target.closest("[data-tilt]");
+  if (!card || card.contains(event.relatedTarget)) return;
+  card.style.setProperty("--tilt-card-x", "0deg");
+  card.style.setProperty("--tilt-card-y", "0deg");
+});
+
+let revealObserver;
+
+function observeRevealItems() {
+  if (!("IntersectionObserver" in window)) {
+    document.querySelectorAll(".reveal").forEach((item) => item.classList.add("is-visible"));
+    return;
+  }
+
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+  }
+
+  document.querySelectorAll(".reveal:not(.is-visible)").forEach((item) => {
+    revealObserver.observe(item);
+  });
+}
+
 document.getElementById("langToggle")?.addEventListener("click", () => {
   currentLang = currentLang === "en" ? "ru" : "en";
   applyTranslations();
@@ -777,3 +844,4 @@ document.getElementById("estimateForm")?.addEventListener("submit", (event) => {
 });
 
 applyTranslations();
+observeRevealItems();

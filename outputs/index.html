@@ -15,6 +15,7 @@
 </head>
 
 <body>
+  <div class="cursor-light" aria-hidden="true"></div>
   <header class="site-header">
     <div class="container header-inner">
       <button class="logo nav-link" data-page="home">
@@ -71,8 +72,29 @@
             <div><strong>02</strong><span data-i18n="trustPaint">Paint Matching</span></div>
             <div><strong>03</strong><span data-i18n="trustBody">Body Repair</span></div>
           </div>
+
+          <aside class="hero-cockpit" data-tilt>
+            <span class="cockpit-kicker" data-i18n="cockpitKicker">Finish Control</span>
+            <div class="cockpit-car">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="cockpit-readout">
+              <div><strong>98%</strong><span data-i18n="cockpitGloss">Gloss target</span></div>
+              <div><strong>3D</strong><span data-i18n="cockpitScan">Panel scan</span></div>
+            </div>
+            <div class="paint-meter"><span></span></div>
+          </aside>
         </div>
       </div>
+
+      <section class="experience-strip">
+        <div class="container experience-grid">
+          <article data-tilt><span>01</span><strong data-i18n="expScan">Digital damage read</strong></article>
+          <article data-tilt><span>02</span><strong data-i18n="expColor">Color behavior check</strong></article>
+          <article data-tilt><span>03</span><strong data-i18n="expSpray">Controlled spray layers</strong></article>
+          <article data-tilt><span>04</span><strong data-i18n="expFinish">Final reflection pass</strong></article>
+        </div>
+      </section>
 
       <section class="paint-lab" aria-label="Interactive paint finish preview">
         <div class="container paint-lab-inner">
@@ -103,7 +125,22 @@
         </div>
       </section>
 
-      <section class="container section">
+      <section class="surface-board">
+        <div class="container surface-board-inner">
+          <div class="surface-copy reveal">
+            <span class="eyebrow" data-i18n="surfaceEyebrow">Surface intelligence</span>
+            <h2 data-i18n="surfaceTitle">Every panel has a different light story.</h2>
+            <p data-i18n="surfaceText">The demo experience is built around how modern paint work is actually judged: reflection, edges, panel tone, clear coat depth and final inspection.</p>
+          </div>
+          <div class="surface-stack">
+            <article class="surface-tile reveal" data-tilt><span>Reflection</span><strong>Lightline check</strong></article>
+            <article class="surface-tile reveal" data-tilt><span>Color</span><strong>Blend map</strong></article>
+            <article class="surface-tile reveal" data-tilt><span>Finish</span><strong>Clear coat depth</strong></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="container section service-preview-section">
         <div class="section-head">
           <span class="eyebrow" data-i18n="homeServicesEyebrow">What we do</span>
           <h2 data-i18n="homeServicesTitle">Professional body repair for cars that need to look right again.</h2>
@@ -140,7 +177,7 @@
         </div>
       </section>
 
-      <section class="dark-section">
+      <section class="dark-section studio-console">
         <div class="container split-section">
           <div>
             <span class="eyebrow" data-i18n="calculatorEyebrow">Estimate tool</span>
