@@ -16,6 +16,8 @@
   --soft-shadow: 0 18px 54px rgba(7, 18, 32, 0.1);
   --radius: 8px;
   --header-height: 78px;
+  --finish-main: #0b2b52;
+  --finish-glow: rgba(18, 148, 255, 0.46);
 }
 
 * {
@@ -168,18 +170,39 @@ button {
 }
 
 .desktop-nav .nav-link {
+  position: relative;
   min-height: 40px;
   padding: 0 12px;
   border-radius: var(--radius);
   color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
   font-weight: 750;
+  overflow: hidden;
 }
 
 .desktop-nav .nav-link:hover,
 .desktop-nav .nav-link.active {
   color: var(--white);
   background: rgba(255, 255, 255, 0.08);
+}
+
+.desktop-nav .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.28s ease;
+}
+
+.desktop-nav .nav-link.active::after,
+.desktop-nav .nav-link:hover::after {
+  transform: scaleX(1);
 }
 
 .header-actions {
@@ -434,6 +457,237 @@ h3 {
   font-weight: 850;
 }
 
+.paint-lab {
+  position: relative;
+  overflow: hidden;
+  color: var(--white);
+  background:
+    linear-gradient(135deg, #05070b 0%, #071629 46%, #0b101a 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.paint-lab::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10%;
+  background:
+    linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.04) 34%, transparent 54%),
+    radial-gradient(circle at 72% 42%, var(--finish-glow), transparent 28%);
+  transform: skewY(-5deg);
+  pointer-events: none;
+}
+
+.paint-lab-inner {
+  position: relative;
+  min-height: 520px;
+  display: grid;
+  grid-template-columns: 0.86fr 1.14fr;
+  gap: 42px;
+  align-items: center;
+  padding: 88px 0;
+}
+
+.paint-lab-copy {
+  max-width: 560px;
+}
+
+.paint-lab-copy h2 {
+  font-size: clamp(36px, 5vw, 68px);
+}
+
+.paint-lab-copy p {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.finish-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.finish-swatch {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius);
+  color: rgba(255, 255, 255, 0.76);
+  background: rgba(255, 255, 255, 0.07);
+  font-weight: 900;
+  transition: transform 0.26s ease, background 0.26s ease, border-color 0.26s ease;
+}
+
+.finish-swatch:hover,
+.finish-swatch.active {
+  transform: translateY(-2px);
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.finish-swatch span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: var(--finish-main);
+  box-shadow: 0 0 22px var(--finish-glow);
+}
+
+.finish-swatch[data-finish="graphite"] span { background: #343a46; }
+.finish-swatch[data-finish="pearl"] span { background: #f4f7fb; }
+.finish-swatch[data-finish="electric"] span { background: #1294ff; }
+
+.finish-stage {
+  position: relative;
+  min-height: 390px;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+
+.finish-stage::before,
+.finish-stage::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.finish-stage::before {
+  width: 68%;
+  height: 56%;
+  background: var(--finish-glow);
+  filter: blur(70px);
+  opacity: 0.7;
+}
+
+.finish-stage::after {
+  width: min(560px, 94%);
+  height: 1px;
+  bottom: 54px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.36), transparent);
+}
+
+.spray-beam {
+  position: absolute;
+  right: 5%;
+  top: 15%;
+  width: 54%;
+  height: 48%;
+  background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.18), transparent 70%);
+  clip-path: polygon(100% 18%, 0 0, 0 100%, 100% 82%);
+  opacity: 0.7;
+  animation: spraySweep 4.8s ease-in-out infinite;
+  z-index: 1;
+}
+
+.paint-card-preview {
+  position: relative;
+  z-index: 2;
+  width: min(620px, 100%);
+  min-height: 320px;
+  display: grid;
+  align-content: center;
+  padding: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.04)),
+    linear-gradient(160deg, rgba(5, 7, 11, 0.86), rgba(5, 7, 11, 0.36));
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(12px);
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.22s ease, box-shadow 0.28s ease;
+}
+
+.paint-card-label {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.car-silhouette {
+  position: relative;
+  width: min(500px, 100%);
+  height: 180px;
+  margin: 38px auto 0;
+}
+
+.car-body,
+.car-roof,
+.car-gloss {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  display: block;
+}
+
+.car-body {
+  bottom: 34px;
+  width: 92%;
+  height: 78px;
+  border-radius: 58px 68px 22px 22px;
+  background:
+    linear-gradient(110deg, rgba(255, 255, 255, 0.58), transparent 18% 72%, rgba(255, 255, 255, 0.24)),
+    linear-gradient(180deg, color-mix(in srgb, var(--finish-main) 72%, white), var(--finish-main));
+  box-shadow: inset 0 -18px 32px rgba(0, 0, 0, 0.34), 0 18px 46px var(--finish-glow);
+}
+
+.car-roof {
+  bottom: 84px;
+  width: 56%;
+  height: 62px;
+  border-radius: 90px 90px 18px 18px;
+  background:
+    linear-gradient(110deg, rgba(255, 255, 255, 0.48), transparent 40%),
+    linear-gradient(180deg, color-mix(in srgb, var(--finish-main) 76%, white), var(--finish-main));
+  clip-path: polygon(16% 100%, 32% 16%, 68% 16%, 88% 100%);
+}
+
+.car-gloss {
+  top: 52px;
+  width: 62%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  filter: blur(2px);
+  animation: glossMove 3.8s ease-in-out infinite;
+}
+
+.wheel {
+  position: absolute;
+  bottom: 16px;
+  width: 48px;
+  height: 48px;
+  border: 10px solid #05070b;
+  border-radius: 50%;
+  background: #6b7280;
+  box-shadow: inset 0 0 0 6px #1f2937;
+}
+
+.wheel.left { left: 18%; }
+.wheel.right { right: 18%; }
+
+@keyframes spraySweep {
+  0%, 100% { transform: translateX(18px); opacity: 0.32; }
+  50% { transform: translateX(-18px); opacity: 0.76; }
+}
+
+@keyframes glossMove {
+  0%, 100% { transform: translateX(-28px); opacity: 0.34; }
+  50% { transform: translateX(34px); opacity: 0.88; }
+}
+
 .section {
   padding: 88px 0;
 }
@@ -531,6 +785,36 @@ h3 {
   align-items: center;
 }
 
+.studio-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 44px;
+}
+
+.studio-steps article {
+  min-height: 150px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035));
+}
+
+.studio-steps span {
+  display: block;
+  margin-bottom: 18px;
+  color: #7dccff;
+  font-size: 22px;
+  font-weight: 950;
+}
+
+.studio-steps p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.55;
+}
+
 .split-section p {
   max-width: 650px;
   color: rgba(255, 255, 255, 0.7);
@@ -566,6 +850,15 @@ h3 {
   width: 100%;
   height: 220px;
   object-fit: cover;
+  filter: saturate(0.92) contrast(1.05);
+  transition: transform 0.55s ease, filter 0.55s ease;
+}
+
+.service-card:hover img,
+.work-card:hover img,
+.preview-card:hover img {
+  transform: scale(1.045);
+  filter: saturate(1.08) contrast(1.08);
 }
 
 .service-card .card-body,
@@ -1029,6 +1322,7 @@ textarea:focus {
   }
 
   .trust-row,
+  .paint-lab-inner,
   .section-head,
   .preview-grid,
   .services-grid,
@@ -1071,6 +1365,15 @@ textarea:focus {
   .site-footer {
     padding-bottom: 72px;
   }
+
+  .paint-lab-inner {
+    min-height: auto;
+    padding: 66px 0;
+  }
+
+  .studio-steps {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1098,6 +1401,23 @@ textarea:focus {
 
   .trust-row div {
     min-height: auto;
+  }
+
+  .finish-stage {
+    min-height: 320px;
+  }
+
+  .paint-card-preview {
+    min-height: 260px;
+    padding: 22px;
+  }
+
+  .car-silhouette {
+    height: 150px;
+  }
+
+  .studio-steps {
+    grid-template-columns: 1fr;
   }
 
   .preview-card img,

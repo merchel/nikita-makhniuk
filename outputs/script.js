@@ -28,6 +28,9 @@ const translations = {
     trustCollision: "Collision Repair",
     trustPaint: "Paint Matching",
     trustBody: "Body Repair",
+    labEyebrow: "Paint Lab",
+    labTitle: "Choose the mood of the finish before the repair even begins.",
+    labText: "A premium paint job is about tone, reflection, edge control and how the color moves under light. This demo preview turns the shop into a finish studio.",
     homeServicesEyebrow: "What we do",
     homeServicesTitle: "Professional body repair for cars that need to look right again.",
     collisionRepair: "Collision Repair",
@@ -44,6 +47,10 @@ const translations = {
     estimatedRange: "Estimated range",
     estimatedTime: "Estimated time",
     estimateDisclaimer: "This is only a rough demo estimate. Final pricing depends on inspection, parts, paint, labor and vehicle condition.",
+    studioMask: "Clean edges and protected trim before refinishing.",
+    studioMatch: "Color tone checked for the way it shifts in light.",
+    studioSpray: "Controlled layers for depth, gloss and coverage.",
+    studioCure: "Finish inspection after the surface settles.",
     servicesEyebrow: "Services",
     servicesTitle: "Auto body repair, paint and refinishing services.",
     workEyebrow: "Before & After",
@@ -96,6 +103,9 @@ const translations = {
     trustCollision: "Ремонт после ДТП",
     trustPaint: "Подбор цвета",
     trustBody: "Кузовной ремонт",
+    labEyebrow: "Лаборатория цвета",
+    labTitle: "Выберите настроение финиша еще до начала ремонта.",
+    labText: "Премиальная покраска - это тон, отражение, чистые края и то, как цвет меняется под светом. Этот демо-блок превращает мастерскую в студию финиша.",
     homeServicesEyebrow: "Что мы делаем",
     homeServicesTitle: "Профессиональный кузовной ремонт для автомобилей, которые должны снова выглядеть правильно.",
     collisionRepair: "Ремонт после ДТП",
@@ -112,6 +122,10 @@ const translations = {
     estimatedRange: "Примерная стоимость",
     estimatedTime: "Примерный срок",
     estimateDisclaimer: "Это только приблизительная демо-оценка. Финальная цена зависит от осмотра, деталей, краски, работ и состояния автомобиля.",
+    studioMask: "Чистые края и защита молдингов перед покраской.",
+    studioMatch: "Проверка оттенка и его поведения под светом.",
+    studioSpray: "Контролируемые слои для глубины, глянца и покрытия.",
+    studioCure: "Финальная проверка после стабилизации поверхности.",
     servicesEyebrow: "Услуги",
     servicesTitle: "Кузовной ремонт, покраска и восстановление авто.",
     workEyebrow: "До и после",
@@ -433,6 +447,43 @@ const options = {
 let currentLang = "en";
 let pageChangeTimer;
 
+const finishes = {
+  midnight: {
+    main: "#0b2b52",
+    glow: "rgba(18, 148, 255, 0.46)",
+    en: "Midnight Blue Finish",
+    ru: "Финиш Midnight Blue",
+    shortEn: "Midnight",
+    shortRu: "Midnight"
+  },
+  graphite: {
+    main: "#343a46",
+    glow: "rgba(148, 163, 184, 0.42)",
+    en: "Graphite Glass Finish",
+    ru: "Финиш Graphite Glass",
+    shortEn: "Graphite",
+    shortRu: "Graphite"
+  },
+  pearl: {
+    main: "#eef3f8",
+    glow: "rgba(255, 255, 255, 0.48)",
+    en: "Pearl White Finish",
+    ru: "Финиш Pearl White",
+    shortEn: "Pearl",
+    shortRu: "Pearl"
+  },
+  electric: {
+    main: "#1294ff",
+    glow: "rgba(18, 148, 255, 0.68)",
+    en: "Electric Blue Finish",
+    ru: "Финиш Electric Blue",
+    shortEn: "Electric",
+    shortRu: "Electric"
+  }
+};
+
+let currentFinish = "midnight";
+
 function text(key) {
   return translations[currentLang][key] || key;
 }
@@ -471,6 +522,28 @@ function applyTranslations() {
   renderWork();
   fillSelects();
   calculateEstimate();
+  applyFinish(currentFinish);
+}
+
+function applyFinish(finishKey) {
+  const finish = finishes[finishKey] || finishes.midnight;
+  currentFinish = finishKey;
+
+  document.documentElement.style.setProperty("--finish-main", finish.main);
+  document.documentElement.style.setProperty("--finish-glow", finish.glow);
+
+  document.querySelectorAll(".finish-swatch").forEach((button) => {
+    const key = button.dataset.finish;
+    const label = finishes[key][currentLang === "ru" ? "shortRu" : "shortEn"];
+    const dot = button.querySelector("span") || document.createElement("span");
+    button.innerHTML = "";
+    button.appendChild(dot);
+    button.append(label);
+    button.classList.toggle("active", key === finishKey);
+  });
+
+  const label = document.getElementById("finishLabel");
+  if (label) label.textContent = finish[currentLang];
 }
 
 function renderServices() {
@@ -661,6 +734,26 @@ document.addEventListener("keydown", (event) => {
 
 document.getElementById("menuBtn")?.addEventListener("click", () => {
   document.getElementById("mobileNav")?.classList.toggle("open");
+});
+
+document.getElementById("finishSwatches")?.addEventListener("click", (event) => {
+  const button = event.target.closest(".finish-swatch");
+  if (!button) return;
+  applyFinish(button.dataset.finish);
+});
+
+document.getElementById("finishStage")?.addEventListener("mousemove", (event) => {
+  const stage = event.currentTarget;
+  const rect = stage.getBoundingClientRect();
+  const x = ((event.clientX - rect.left) / rect.width - 0.5) * 12;
+  const y = ((event.clientY - rect.top) / rect.height - 0.5) * 10;
+  stage.style.setProperty("--tilt-x", `${y * -1}deg`);
+  stage.style.setProperty("--tilt-y", `${x}deg`);
+});
+
+document.getElementById("finishStage")?.addEventListener("mouseleave", (event) => {
+  event.currentTarget.style.setProperty("--tilt-x", "0deg");
+  event.currentTarget.style.setProperty("--tilt-y", "0deg");
 });
 
 document.getElementById("langToggle")?.addEventListener("click", () => {

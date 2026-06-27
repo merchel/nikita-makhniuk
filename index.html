@@ -74,6 +74,35 @@
         </div>
       </div>
 
+      <section class="paint-lab" aria-label="Interactive paint finish preview">
+        <div class="container paint-lab-inner">
+          <div class="paint-lab-copy">
+            <span class="eyebrow" data-i18n="labEyebrow">Paint Lab</span>
+            <h2 data-i18n="labTitle">Choose the mood of the finish before the repair even begins.</h2>
+            <p data-i18n="labText">A premium paint job is about tone, reflection, edge control and how the color moves under light. This demo preview turns the shop into a finish studio.</p>
+            <div class="finish-swatches" id="finishSwatches" aria-label="Paint finish options">
+              <button class="finish-swatch active" type="button" data-finish="midnight"><span></span>Midnight</button>
+              <button class="finish-swatch" type="button" data-finish="graphite"><span></span>Graphite</button>
+              <button class="finish-swatch" type="button" data-finish="pearl"><span></span>Pearl</button>
+              <button class="finish-swatch" type="button" data-finish="electric"><span></span>Electric</button>
+            </div>
+          </div>
+          <div class="finish-stage" id="finishStage">
+            <div class="spray-beam"></div>
+            <div class="paint-card-preview">
+              <span class="paint-card-label" id="finishLabel">Midnight Blue Finish</span>
+              <div class="car-silhouette">
+                <span class="car-roof"></span>
+                <span class="car-body"></span>
+                <span class="car-gloss"></span>
+                <span class="wheel left"></span>
+                <span class="wheel right"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="container section">
         <div class="section-head">
           <span class="eyebrow" data-i18n="homeServicesEyebrow">What we do</span>
@@ -126,6 +155,12 @@
             <strong>$650 – $1,800</strong>
             <p data-i18n="estimateDisclaimer">Final pricing depends on inspection, parts, paint and labor.</p>
           </div>
+        </div>
+        <div class="container studio-steps">
+          <article><span>Mask</span><p data-i18n="studioMask">Clean edges and protected trim before refinishing.</p></article>
+          <article><span>Match</span><p data-i18n="studioMatch">Color tone checked for the way it shifts in light.</p></article>
+          <article><span>Spray</span><p data-i18n="studioSpray">Controlled layers for depth, gloss and coverage.</p></article>
+          <article><span>Cure</span><p data-i18n="studioCure">Finish inspection after the surface settles.</p></article>
         </div>
       </section>
     </section>
